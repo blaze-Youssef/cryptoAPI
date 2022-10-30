@@ -1,6 +1,6 @@
 from datetime import datetime
 
-import requests
+import pycurl_requests as requests
 from dateutil import parser
 from sqlalchemy import desc
 
@@ -132,7 +132,7 @@ def refresh_exchanges():
                     trades_count=data_bt["trades_count"],
                 )
                 Session.add(obj)
-            Session.commit()
+        Session.commit()
 
         for symbol_id in symbols_eth:
             last: Asseteth = (
@@ -163,7 +163,7 @@ def refresh_exchanges():
                     trades_count=data_bt["trades_count"],
                 )
                 Session.add(obj)
-            Session.commit()
+        Session.commit()
         Session.close()
     except:
         Session.close()
