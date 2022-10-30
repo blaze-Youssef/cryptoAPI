@@ -53,7 +53,7 @@ async def docs_redirect():
 
 
 @app.get("/v1/ohlcv/{symbol_id}/history", responses=response_search_model)
-async def root(
+async def history(
     symbol_id: str,
     time_start: datetime = parser.parse(INITIAL_DATETIME_DEF),
     time_end: datetime = datetime.now(),
