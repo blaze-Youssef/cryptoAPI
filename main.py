@@ -6,6 +6,7 @@ from typing import List
 from dateutil import parser
 from fastapi import Depends, FastAPI
 from fastapi.openapi.utils import get_openapi
+from fastapi.responses import RedirectResponse
 
 from schemas.schemas import SYMBOL_ID, response
 from src.database_api import scoped_Session
@@ -44,6 +45,11 @@ def my_schema():
     )
     app.openapi_schema = openapi_schema
     return app.openapi_schema
+
+
+@app.get("/")
+async def docs_redirect():
+    return RedirectResponse(url="/docs")
 
 
 @app.get("/v1/ohlcv/{symbol_id}/history", responses=response_search_model)
