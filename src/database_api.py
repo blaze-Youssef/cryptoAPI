@@ -14,7 +14,7 @@ from sqlalchemy.pool import StaticPool
 SQLALCHEMY_DATABASE_URL = "sqlite:///./db.sqlite"
 # SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
 SQLALCHEMY_DATABASE_URL = "mysql+pymysql://admin:1q2w3e4r5t@crypto.cztrbrxes3k3.us-east-1.rds.amazonaws.com/crypto"
-engine = create_engine(SQLALCHEMY_DATABASE_URL, poolclass=StaticPool, echo=True)
+engine = create_engine(SQLALCHEMY_DATABASE_URL, poolclass=StaticPool, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 scoped_Session = scoped_session(SessionLocal)
 Base = declarative_base()
