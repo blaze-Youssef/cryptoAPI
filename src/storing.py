@@ -117,7 +117,7 @@ def refresh_exchanges():
             data_btc = api_call(
                 f"/v1/ohlcv/{symbol_id}/history?period_id=1MIN&time_start={INITIAL_DATETIME}&time_end={get_iso()}&limit={LIMIT}"
             )
-            for i, data_bt in enumerate(data_btc):
+            for data_bt in data_btc:
                 obj = Assetbtc(
                     symbol_id=symbol_id,
                     time_period_start=parser.parse(data_bt["time_period_start"]),
@@ -132,7 +132,7 @@ def refresh_exchanges():
                     trades_count=data_bt["trades_count"],
                 )
                 Session.add(obj)
-        Session.commit()
+            Session.commit()
 
         for symbol_id in symbols_eth:
             last: Asseteth = (
@@ -148,7 +148,7 @@ def refresh_exchanges():
             data_btc = api_call(
                 f"/v1/ohlcv/{symbol_id}/history?period_id=1MIN&time_start={INITIAL_DATETIME}&time_end={get_iso()}&limit={LIMIT}"
             )
-            for i, data_bt in enumerate(data_btc):
+            for data_bt in data_btc:
                 obj = Asseteth(
                     symbol_id=symbol_id,
                     time_period_start=parser.parse(data_bt["time_period_start"]),
@@ -163,9 +163,7 @@ def refresh_exchanges():
                     trades_count=data_bt["trades_count"],
                 )
                 Session.add(obj)
-                if ((i / 29).is_integer() and i != 0) or i == len(data_bt) - 1:
-                    Session.commit()
-        Session.commit()
+            Session.commit()
         Session.close()
     except:
         Session.close()
