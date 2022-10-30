@@ -1,5 +1,6 @@
-bind = "0.0.0.0:8000"
-
+bind = "127.0.0.1:8000"
+workers = 4
+timeout = 60
 
 worker_class = "uvicorn.workers.UvicornWorker"
 loglevel = "debug"
