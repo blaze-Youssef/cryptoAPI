@@ -3,3 +3,4 @@ test.py
 creds
 __pycache__
 .vscode
+Dockerfile
