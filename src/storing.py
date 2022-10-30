@@ -6,8 +6,10 @@ from sqlalchemy import desc
 
 from src.database import Assetbtc, Asseteth, SessionLocal
 
-INITIAL_DATETIME_DEF = "2022-05-01T00:00:00"
-LIMIT = 10000
+from .conf import get_settings
+
+INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
+LIMIT = get_settings("LIMIT")
 
 
 symbols_btc = [
@@ -56,7 +58,7 @@ symbols_eth = [
 def api_call(path) -> dict:
     return requests.get(
         f"https://rest.coinapi.io{path}",
-        headers={"X-CoinAPI-Key": "3913751D-5F8B-4A99-9DBC-67892BED79C3"},
+        headers={"X-CoinAPI-Key": get_settings("COIN_API")},
     ).json()
 
 
