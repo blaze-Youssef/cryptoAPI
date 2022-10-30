@@ -17,16 +17,15 @@ app = FastAPI()
 
 
 def loop():
+    try:
 
-    import src.storing
+        import src.storing
 
-    while True:
-        src.storing.refresh_exchanges()
-        sleep(55)
-
-
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-executor.submit(loop)
+        while True:
+            src.storing.refresh_exchanges()
+            sleep(55)
+    except BaseException as e:
+        print(e)
 
 
 def get_db():
@@ -67,3 +66,7 @@ def listymbols(Filter: str = None):
 
 
 app.openapi = my_schema
+
+
+executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
+executor.submit(loop)
