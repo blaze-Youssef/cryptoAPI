@@ -4,3 +4,4 @@ creds
 __pycache__
 .vscode
 Dockerfile
+.upwork

@@ -132,8 +132,6 @@ def refresh_exchanges():
                     trades_count=data_bt["trades_count"],
                 )
                 Session.add(obj)
-                if (i / 29).is_integer() and i != 0:
-                    Session.commit()
         Session.commit()
 
         for symbol_id in symbols_eth:
