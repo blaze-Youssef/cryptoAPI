@@ -1,6 +1,4 @@
-import concurrent.futures
 from datetime import datetime
-from time import sleep
 from typing import List
 
 import sentry_sdk
@@ -24,18 +22,6 @@ sentry_sdk.init(
     traces_sample_rate=1.0,
 )
 app = FastAPI()
-
-
-def loop():
-    try:
-
-        import src.storing
-
-        while True:
-            src.storing.refresh_exchanges()
-
-    except BaseException as e:
-        print(e)
 
 
 def get_db():
@@ -80,7 +66,3 @@ def listymbols(Filter: str = None):
 
 
 app.openapi = my_schema
-
-
-executor = concurrent.futures.ThreadPoolExecutor(max_workers=1)
-executor.submit(loop)
