@@ -33,7 +33,7 @@ async def search(
                     Session.query(Asseteth)
                     .where(Asseteth.symbol_id == symbol_id.symbol_id)
                     .where(time_start <= Asseteth.time_period_start)
-                    .where(time_end >= Asseteth.time_period_end.time_period_end)
+                    .where(time_end >= Asseteth.time_period_end)
                     .limit(limit)
                     .all()
                 )

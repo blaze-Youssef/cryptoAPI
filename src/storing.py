@@ -10,7 +10,7 @@ from .conf import get_settings
 
 INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
-
+request_session = None
 
 symbols_btc = [
     "COINBASE_SPOT_BTC_USD",
@@ -56,7 +56,10 @@ symbols_eth = [
 
 
 def api_call(path) -> dict:
-    return requests.get(
+    global request_session
+    if not request_session:
+        request_session = requests.Session()
+    return request_session.get(
         f"https://rest.coinapi.io{path}",
         headers={"X-CoinAPI-Key": get_settings("COIN_API")},
     ).json()
@@ -103,6 +106,7 @@ def get_iso():
 def refresh_exchanges():
     Session = SessionLocal()
     try:
+        objs = []
         for symbol_id in symbols_btc:
             last: Assetbtc = (
                 Session.query(Assetbtc)
@@ -131,9 +135,10 @@ def refresh_exchanges():
                     volume_traded=data_bt["volume_traded"],
                     trades_count=data_bt["trades_count"],
                 )
-                Session.add(obj)
+                objs.append(obj)
+        Session.bulk_save_objects(objs)
         Session.commit()
-
+        objs = []
         for symbol_id in symbols_eth:
             last: Asseteth = (
                 Session.query(Asseteth)
@@ -162,8 +167,12 @@ def refresh_exchanges():
                     volume_traded=data_bt["volume_traded"],
                     trades_count=data_bt["trades_count"],
                 )
-                Session.add(obj)
+                objs.append(obj)
+        Session.bulk_save_objects(objs)
         Session.commit()
+
+    except BaseException as e:
+        print(e)
         Session.close()
-    except:
+    else:
         Session.close()

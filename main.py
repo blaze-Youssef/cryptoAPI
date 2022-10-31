@@ -24,6 +24,7 @@ def loop():
 
         while True:
             src.storing.refresh_exchanges()
+
     except BaseException as e:
         print(e)
 
