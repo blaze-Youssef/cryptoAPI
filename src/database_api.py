@@ -11,9 +11,9 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.pool import StaticPool
 
-SQLALCHEMY_DATABASE_URL = "sqlite:///./db.sqlite"
-# SQLALCHEMY_DATABASE_URL = "postgresql://user:password@postgresserver/db"
-SQLALCHEMY_DATABASE_URL = "mysql+pymysql://admin:1q2w3e4r5t@crypto.cztrbrxes3k3.us-east-1.rds.amazonaws.com/crypto"
+from .conf import get_settings
+
+SQLALCHEMY_DATABASE_URL = get_settings("SQLALCHEMY_DATABASE_URL")
 engine = create_engine(SQLALCHEMY_DATABASE_URL, poolclass=StaticPool, echo=False)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 scoped_Session = scoped_session(SessionLocal)

@@ -17,6 +17,7 @@ async def search(
     limit,
     Session: Session_int,
 ):
+    Session.commit()
     for i in [0, 1]:
         try:
             if symbol_id.type == 0:
