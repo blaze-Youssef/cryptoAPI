@@ -1,13 +1,21 @@
-from datetime import datetime
+from datetime import datetime, timedelta
 
 import pycurl_requests as requests
+import sentry_sdk
 from dateutil import parser
-from sqlalchemy import and_, asc, desc, func
+from sqlalchemy import func
 
 from src.database import Assetbtc, Asseteth, SessionLocal
 
 from .conf import get_settings
 
+sentry_sdk.init(
+    dsn=get_settings("DSN"),
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+)
 INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
 request_session = None
@@ -85,7 +93,7 @@ def api_call(path) -> dict:
 
 
 def get_iso():
-    return datetime.now().replace(microsecond=0).isoformat()
+    return (datetime.now().replace(microsecond=0) + timedelta(minutes=1)).isoformat()
 
 
 """def add_todb_otherthread(Objs: List):
@@ -98,9 +106,9 @@ def get_iso():
 
 
 def refresh_exchanges():
-    Session = SessionLocal()
-    try:
 
+    try:
+        Session = SessionLocal()
         # Get Last update time for all BTC
         query = (
             Session.query(Assetbtc.symbol_id, func.max(Assetbtc.time_period_end))
@@ -175,8 +183,9 @@ def refresh_exchanges():
                     objs.append(obj)
         Session.add_all(objs)
         Session.commit()
-    except BaseException as e:
+    except Exception as e:
         print(e)
+        sentry_sdk.capture_exception(e)
         Session.close()
     else:
         Session.close()

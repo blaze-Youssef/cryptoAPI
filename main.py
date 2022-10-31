@@ -3,17 +3,26 @@ from datetime import datetime
 from time import sleep
 from typing import List
 
+import sentry_sdk
 from dateutil import parser
 from fastapi import Depends, FastAPI
 from fastapi.openapi.utils import get_openapi
 from fastapi.responses import RedirectResponse
 
 from schemas.schemas import SYMBOL_ID, response
+from src.conf import get_settings
 from src.database_api import scoped_Session
 from src.methods import list_symbols, response_search_model
 from src.search import search
 from src.storing import INITIAL_DATETIME_DEF
 
+sentry_sdk.init(
+    dsn=get_settings("DSN"),
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+)
 app = FastAPI()
 
 
@@ -60,7 +69,6 @@ async def history(
     limit=100,
     Session=Depends(get_db),
 ) -> List[response]:
-
     symbol_id = SYMBOL_ID(symbol_id=symbol_id, type=0)
 
     return await search(symbol_id, time_start, time_end, limit, Session)
