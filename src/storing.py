@@ -183,6 +183,9 @@ def refresh_exchanges():
                     objs.append(obj)
         Session.add_all(objs)
         Session.commit()
+    except KeyboardInterrupt:
+        Session.close()
+        print("Interrupt..")
     except Exception as e:
         print(e)
         sentry_sdk.capture_exception(e)
