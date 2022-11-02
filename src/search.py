@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from async_lru import alru_cache
 from fastapi import HTTPException
 from pymysql import OperationalError
 from sqlalchemy.orm.session import Session as Session_int
@@ -9,7 +8,6 @@ from schemas.schemas import SYMBOL_ID, response
 from src.database import Assetbtc, Asseteth
 
 
-@alru_cache(maxsize=1024)
 async def search(
     symbol_id: SYMBOL_ID,
     time_start: datetime,
