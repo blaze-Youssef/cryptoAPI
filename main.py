@@ -1,7 +1,16 @@
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn=get_settings("DSN"),
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    # We recommend adjusting this value in production.
+    traces_sample_rate=1.0,
+)
+
 from datetime import datetime
 from typing import List
 
-import sentry_sdk
 from dateutil import parser
 from fastapi import Depends, FastAPI, HTTPException, Path, Query
 from fastapi.responses import RedirectResponse
@@ -13,13 +22,6 @@ from src.methods import PrettyJSONResponse, list_symbols, response_search_model
 from src.search import search
 from src.storing import INITIAL_DATETIME_DEF
 
-sentry_sdk.init(
-    dsn=get_settings("DSN"),
-    # Set traces_sample_rate to 1.0 to capture 100%
-    # of transactions for performance monitoring.
-    # We recommend adjusting this value in production.
-    traces_sample_rate=1.0,
-)
 app = FastAPI(
     title="Crypto Data API",
     version="1.0",

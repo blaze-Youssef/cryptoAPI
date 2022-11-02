@@ -1,13 +1,4 @@
-from datetime import datetime, timedelta
-
-import requests
 import sentry_sdk
-from dateutil import parser
-from sqlalchemy import func
-
-from src.database import Assetbtc, Asseteth
-
-from .conf import get_settings
 
 sentry_sdk.init(
     dsn=get_settings("DSN"),
@@ -16,6 +7,18 @@ sentry_sdk.init(
     # We recommend adjusting this value in production.
     traces_sample_rate=1.0,
 )
+
+from datetime import datetime, timedelta
+
+import requests
+from dateutil import parser
+from sqlalchemy import func
+
+from src.database import Assetbtc, Asseteth, engine
+from src.database import scoped_Session as Session
+
+from .conf import get_settings
+
 INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
 request_session = None
@@ -108,9 +111,8 @@ def get_iso():
 def refresh_exchanges_btc():
 
     try:
-        from src.database import SessionLocal
 
-        Session = SessionLocal()
+        Session.begin()
         # Get Last update time for all BTC
         query = (
             Session.query(Assetbtc.symbol_id, func.max(Assetbtc.time_period_end))
@@ -160,9 +162,8 @@ def refresh_exchanges_btc():
 def refresh_exchanges_eth():
 
     try:
-        from src.database import scoped_Session
 
-        Session = scoped_Session()
+        Session.begin()
         objs = []
         # Get Last update time for all eth
         query = (
