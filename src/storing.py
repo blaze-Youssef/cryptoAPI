@@ -1,11 +1,11 @@
 from datetime import datetime, timedelta
 
-import pycurl_requests as requests
+import requests
 import sentry_sdk
 from dateutil import parser
 from sqlalchemy import func
 
-from src.database import Assetbtc, Asseteth, SessionLocal
+from src.database import Assetbtc, Asseteth
 
 from .conf import get_settings
 
@@ -105,9 +105,11 @@ def get_iso():
     return True"""
 
 
-def refresh_exchanges():
+def refresh_exchanges_btc():
 
     try:
+        from src.database import SessionLocal
+
         Session = SessionLocal()
         # Get Last update time for all BTC
         query = (
@@ -146,6 +148,21 @@ def refresh_exchanges():
 
         Session.add_all(objs)
         Session.commit()
+    except KeyboardInterrupt:
+        print("Interrupt..")
+    except Exception as e:
+        print(e)
+        sentry_sdk.capture_exception(e)
+
+    Session.close()
+
+
+def refresh_exchanges_eth():
+
+    try:
+        from src.database import scoped_Session
+
+        Session = scoped_Session()
         objs = []
         # Get Last update time for all eth
         query = (
@@ -184,11 +201,9 @@ def refresh_exchanges():
         Session.add_all(objs)
         Session.commit()
     except KeyboardInterrupt:
-        Session.close()
+
         print("Interrupt..")
     except Exception as e:
         print(e)
         sentry_sdk.capture_exception(e)
-        Session.close()
-    else:
-        Session.close()
+    Session.close()
