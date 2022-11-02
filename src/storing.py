@@ -1,5 +1,7 @@
 import sentry_sdk
 
+from .conf import get_settings
+
 sentry_sdk.init(
     dsn=get_settings("DSN"),
     # Set traces_sample_rate to 1.0 to capture 100%
@@ -16,8 +18,6 @@ from sqlalchemy import func
 
 from src.database import Assetbtc, Asseteth, engine
 from src.database import scoped_Session as Session
-
-from .conf import get_settings
 
 INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")

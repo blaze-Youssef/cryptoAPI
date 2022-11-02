@@ -1,5 +1,7 @@
 import sentry_sdk
 
+from src.conf import get_settings
+
 sentry_sdk.init(
     dsn=get_settings("DSN"),
     # Set traces_sample_rate to 1.0 to capture 100%
