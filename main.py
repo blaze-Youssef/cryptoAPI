@@ -3,7 +3,7 @@ from typing import List
 
 import sentry_sdk
 from dateutil import parser
-from fastapi import Depends, FastAPI, Path, Query
+from fastapi import Depends, FastAPI, HTTPException, Path, Query
 from fastapi.responses import RedirectResponse
 
 from schemas.schemas import SYMBOL_ID, response
@@ -46,6 +46,7 @@ async def docs_redirect():
     description="Get OHLCV timeseries data returned in time ascending order. Data can be requested by the period and for the specific symbol eg BITSTAMP_SPOT_BTC_USD, if you need to query timeseries by asset pairs eg. BTC/USD, then please reffer to the Exchange Rates Timeseries data",
 )
 async def history(
+    API_KEY: str = Query(..., description="Authentication token"),
     symbol_id: str = Path(
         ...,
         description="Symbol identifier of requested timeseries (full list available [here](/v1/ListSymbols))",
@@ -66,6 +67,8 @@ async def history(
     ),
     Session=Depends(get_db),
 ) -> List[response]:
+    if not API_KEY == get_settings("API_KEY"):
+        raise HTTPException(401, "Not authenticated.")
     symbol_id = SYMBOL_ID(symbol_id=symbol_id, type=0)
 
     return await search(symbol_id, time_start, time_end, limit, Session)
