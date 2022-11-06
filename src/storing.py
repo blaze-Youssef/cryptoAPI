@@ -11,6 +11,7 @@ sentry_sdk.init(
 )
 
 from datetime import datetime, timedelta
+from typing import Dict, List
 
 import requests
 from dateutil import parser
@@ -60,14 +61,23 @@ symbols_eth = [
 ]
 
 
-def api_call(path) -> dict:
+def api_call(path) -> List[Dict]:
     global request_session
+    Exc = None
     if not request_session:
         request_session = requests.Session()
-    return request_session.get(
-        f"https://rest.coinapi.io{path}",
-        headers={"X-CoinAPI-Key": get_settings("COIN_API")},
-    ).json()
+    url = f"https://rest.coinapi.io{path}"
+    for _ in (0, 1):
+        try:
+            response = request_session.get(
+                url,
+                headers={"X-CoinAPI-Key": get_settings("COIN_API")},
+            ).json()
+        except BaseException as e:
+            Exc = e
+        else:
+            return response
+    raise Exception(f"Error  in GET request:\nurl: {url}\nError: {Exc}")
 
 
 """def refresh_assets():
@@ -207,4 +217,5 @@ def refresh_exchanges_eth():
     except Exception as e:
         print(e)
         sentry_sdk.capture_exception(e)
+    Session.close()
     Session.close()
