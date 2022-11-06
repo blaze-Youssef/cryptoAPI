@@ -19,7 +19,7 @@ from sqlalchemy import func
 from src.database import Assetbtc, Asseteth, engine
 from src.database import scoped_Session as Session
 
-INITIAL_DATETIME_DEF = get_settings("INITIAL_DATETIME_DEF")
+INITIAL_DATETIME_DEF: str = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
 request_session = None
 

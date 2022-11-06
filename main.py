@@ -71,13 +71,14 @@ async def history(
     ),
     Session=Depends(get_db),
 ) -> List[response]:
+
     if not API_KEY == get_settings("API_KEY"):
         raise HTTPException(401, "Not authenticated.")
-    symbol_id = SYMBOL_ID(symbol_id=symbol_id, type=0)
+    symbol: SYMBOL_ID = SYMBOL_ID(symbol_id=symbol_id, type=0)
 
-    return await search(symbol_id, time_start, time_end, limit, Session)
+    return await search(symbol, time_start, time_end, limit, Session)
 
 
 @app.get("/v1/ListSymbols", response_class=PrettyJSONResponse)
-def listymbols(Filter: str = None) -> List[str]:
+def listymbols(Filter: (str | None) = None) -> List[str]:
     return list_symbols(Filter)

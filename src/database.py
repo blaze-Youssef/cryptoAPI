@@ -12,7 +12,7 @@ from sqlalchemy.orm import scoped_session, sessionmaker
 
 from .conf import get_settings
 
-SQLALCHEMY_DATABASE_URL = get_settings("SQLALCHEMY_DATABASE_URL")
+SQLALCHEMY_DATABASE_URL: str = get_settings("SQLALCHEMY_DATABASE_URL")
 engine = create_engine(SQLALCHEMY_DATABASE_URL, echo=True, pool_size=20, max_overflow=0)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 scoped_Session = scoped_session(SessionLocal)

@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from fastapi import HTTPException
 from pymysql import OperationalError
@@ -14,31 +15,29 @@ async def search(
     time_end: datetime,
     limit,
     Session: Session_int,
-):
-    for i in [0, 1]:
-        try:
-            if symbol_id.type == 0:
-                data = (
-                    Session.query(Assetbtc)
-                    .where(Assetbtc.symbol_id == symbol_id.symbol_id)
-                    .where(time_start <= Assetbtc.time_period_start)
-                    .where(time_end >= Assetbtc.time_period_end)
-                    .limit(limit)
-                    .all()
-                )
-            else:
-                data = (
-                    Session.query(Asseteth)
-                    .where(Asseteth.symbol_id == symbol_id.symbol_id)
-                    .where(time_start <= Asseteth.time_period_start)
-                    .where(time_end >= Asseteth.time_period_end)
-                    .limit(limit)
-                    .all()
-                )
-            break
-        except OperationalError:
-            if i == 1:
-                raise HTTPException(
-                    500, detail="Database error, please try again later."
-                )
-    return [response(**ss.__dict__) for ss in data]
+) -> List[response]:
+
+    try:
+        if symbol_id.type == 0:
+            data = (
+                Session.query(Assetbtc)
+                .where(Assetbtc.symbol_id == symbol_id.symbol_id)
+                .where(time_start <= Assetbtc.time_period_start)
+                .where(time_end >= Assetbtc.time_period_end)
+                .limit(limit)
+                .all()
+            )
+        else:
+            data = (
+                Session.query(Asseteth)
+                .where(Asseteth.symbol_id == symbol_id.symbol_id)
+                .where(time_start <= Asseteth.time_period_start)
+                .where(time_end >= Asseteth.time_period_end)
+                .limit(limit)
+                .all()
+            )
+    except OperationalError:
+
+        raise HTTPException(500, detail="Database error, please try again later.")
+    else:
+        return [response(**ss.__dict__) for ss in data]

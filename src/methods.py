@@ -2,7 +2,7 @@ import json
 import typing
 from datetime import datetime
 from functools import cache
-from typing import List
+from typing import Dict, List
 
 from starlette.responses import Response
 
@@ -32,7 +32,7 @@ def list_symbols(f: str):
     return symbols_eth + symbols_btc
 
 
-response_search_model = {
+response_search_model: Dict = {
     200: {
         "description": "List of availabe matches.",
         "model": List[response],
