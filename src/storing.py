@@ -63,7 +63,7 @@ symbols_eth = [
 
 def api_call(path) -> List[Dict]:
     global request_session
-    Exc = None
+    Exc: BaseException = BaseException("Error!")
     if not request_session:
         request_session = requests.Session()
     url = f"https://rest.coinapi.io{path}"
@@ -77,7 +77,7 @@ def api_call(path) -> List[Dict]:
             Exc = e
         else:
             return response
-    raise Exception(f"Error  in GET request:\nurl: {url}\nError: {Exc}")
+    raise Exc
 
 
 """def refresh_assets():
