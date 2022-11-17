@@ -112,6 +112,8 @@ def refresh_exchanges_btc():
         except Exception as e:
             print(e)
             sentry_sdk.capture_exception(e)
+        except:
+            sentry_sdk.capture_exception()
 
     Session.close()
 
@@ -168,7 +170,8 @@ def refresh_exchanges_eth():
         except Exception as e:
             print(e)
             sentry_sdk.capture_exception(e)
-
+        except:
+            sentry_sdk.capture_exception()
     Session.close()
 
 
