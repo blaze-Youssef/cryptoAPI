@@ -121,7 +121,7 @@ def refresh_exchanges_btc():
 def refresh_exchanges_eth():
     Session.begin()
     for freq_id, freq in get_all_frequencies():
-
+        freq = freq.upper()
         try:
 
             # Get Last update time for all ETH
