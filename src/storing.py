@@ -160,7 +160,6 @@ def refresh_exchanges_eth():
                             frequency=freq_id,
                         )
                         objs.append(obj)
-                    break  #
 
             Session.add_all(objs)
             Session.commit()
