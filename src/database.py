@@ -15,7 +15,7 @@ from .conf import get_settings
 SQLALCHEMY_DATABASE_URL: str = get_settings("SQLALCHEMY_DATABASE_URL")
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL,
-    echo=False,  #
+    echo=True,  #
     pool_size=20,
     max_overflow=0,
     pool_pre_ping=True,
