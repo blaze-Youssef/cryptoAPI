@@ -63,7 +63,7 @@ def get_iso():
 def refresh_exchanges_btc():
     Session.begin()
     for freq_id, freq in get_all_frequencies():
-
+        freq = freq.upper()
         try:
 
             # Get Last update time for all BTC
@@ -178,7 +178,7 @@ def refresh_exchanges_eth():
 def refresh_exchanges_sol():
     Session.begin()
     for freq_id, freq in get_all_frequencies():
-
+        freq = freq.upper()
         try:
 
             # Get Last update time for all SOL
