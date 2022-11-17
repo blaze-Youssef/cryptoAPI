@@ -8,9 +8,7 @@ try:
 
     while True:
         with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
-            job2 = executor.submit(src.storing.refresh_exchanges_eth)
-            job2.result()
-            exit()
+
             job1 = executor.submit(src.storing.refresh_exchanges_btc)
             job2 = executor.submit(src.storing.refresh_exchanges_eth)
             job3 = executor.submit(src.storing.refresh_exchanges_sol)
