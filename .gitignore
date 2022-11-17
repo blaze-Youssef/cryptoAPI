@@ -5,3 +5,4 @@ __pycache__
 .vscode
 Dockerfile
 .upwork
+.pytest_cache
