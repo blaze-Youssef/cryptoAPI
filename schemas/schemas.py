@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
 
-from src.storing import symbols_btc, symbols_eth
+from src.conf import symbols_btc, symbols_eth, symbols_sol
 
 
 class SYMBOL_ID(BaseModel):

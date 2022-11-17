@@ -2,12 +2,35 @@ import json
 import typing
 from datetime import datetime
 from functools import cache
-from typing import Dict, List
+from typing import Dict, List, Tuple
 
 from starlette.responses import Response
 
 from schemas.schemas import response
 from src.storing import symbols_btc, symbols_eth
+
+FREQUENCIES_IDS: Dict[int, str] = {1: "1min", 2: "1day"}
+
+
+@cache
+def get_freq_id(frequency: str) -> int:
+    frequency = frequency.lower()
+    for id, freq in FREQUENCIES_IDS.items():
+        if freq == frequency:
+            return id
+    raise Exception(f"Can't find Frequency ID for {frequency}")
+
+
+@cache
+def get_freq(id: int) -> str:
+    if id in FREQUENCIES_IDS.keys():
+        return FREQUENCIES_IDS[id]
+    raise Exception(f"Can't find Frequency for {id}")
+
+
+@cache
+def get_all_frequencies() -> Tuple[Tuple]:
+    return tuple(FREQUENCIES_IDS.items())
 
 
 class PrettyJSONResponse(Response):

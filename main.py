@@ -19,7 +19,7 @@ from fastapi.responses import RedirectResponse
 
 from schemas.schemas import SYMBOL_ID, response
 from src.conf import get_settings
-from src.database_api import scoped_Session
+from src.database import scoped_Session
 from src.methods import PrettyJSONResponse, list_symbols, response_search_model
 from src.search import search
 from src.storing import INITIAL_DATETIME_DEF
