@@ -15,7 +15,9 @@ from typing import List
 
 from dateutil import parser
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, status
+from fastapi.openapi.docs import get_swagger_ui_html
 from fastapi.responses import RedirectResponse
+from fastapi.staticfiles import StaticFiles
 
 from schemas.schemas import SYMBOL_ID, response
 from src.conf import get_settings
@@ -33,7 +35,10 @@ app = FastAPI(
     title="Crypto Data API",
     version="1.0",
     description="API to get OHLCV (Open, High, Low, Close, Volume) timeseries data. Each data point of this timeseries represents several indicators calculated from transactions activity inside a time range (period).",
+    swagger_ui_parameters={"defaultModelsExpandDepth": -1},
+    docs_url=None,
 )
+app.mount("/ressources", StaticFiles(directory="./ressources"), name="ressources")
 
 
 def get_db():
@@ -42,6 +47,16 @@ def get_db():
         yield db
     finally:
         db.close()
+
+
+@app.get("/docs", include_in_schema=False)
+async def swagger_ui_html():
+    return get_swagger_ui_html(
+        openapi_url="/openapi.json",
+        title="Crypto Data API",
+        swagger_ui_parameters={"defaultModelsExpandDepth": -1},
+        swagger_favicon_url="/ressources/favicon.ico",
+    )
 
 
 @app.get("/", include_in_schema=False)
