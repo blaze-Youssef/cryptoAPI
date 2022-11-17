@@ -20,13 +20,11 @@ FREQUENCIES_IDS: Dict[int, str] = {1: "1min", 2: "1day"}
 symbols_sol = [
     "DERIBIT_IDX_SOL_USD",
     "DERIBIT_PERP_SOL_USD",
-    "DERIBIT_SPOT_SOL_USD",
 ]
 
 symbols_btc = [
     "DERIBIT_PERP_BTC_USD",
     "DERIBIT_IDX_BTC_USD",
-    "DERIBIT_SPOT_BTC_USD",
 ]
 
 symbols_eth = [
