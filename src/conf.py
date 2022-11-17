@@ -1,5 +1,6 @@
 import os
 from functools import cache
+from typing import Dict
 
 from dotenv import load_dotenv
 
@@ -13,6 +14,8 @@ def get_settings(key: str) -> str:
         return str(val)
     raise Exception(f"Environement variable not found {key}.")
 
+
+FREQUENCIES_IDS: Dict[int, str] = {1: "1min", 2: "1day"}
 
 symbols_sol = [
     "DERIBIT_IDX_SOL_USD",
@@ -31,3 +34,6 @@ symbols_eth = [
     "DERIBIT_IDX_ETH_USD",
     "DERIBIT_SPOT_ETH_USD",
 ]
+
+
+all_symbols = symbols_btc + symbols_eth + symbols_sol

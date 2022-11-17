@@ -7,9 +7,7 @@ from typing import Dict, List, Tuple
 from starlette.responses import Response
 
 from schemas.schemas import response
-from src.storing import symbols_btc, symbols_eth
-
-FREQUENCIES_IDS: Dict[int, str] = {1: "1min", 2: "1day"}
+from src.conf import FREQUENCIES_IDS, all_symbols
 
 
 @cache
@@ -47,12 +45,19 @@ class PrettyJSONResponse(Response):
 
 
 @cache
-def list_symbols(f: str):
+def list_symbols(f: str | None):
     if f:
-        return [x for x in symbols_btc if f.lower() in x.lower()] + [
-            x for x in symbols_eth if f.lower() in x.lower()
-        ]
-    return symbols_eth + symbols_btc
+        f = f.lower()
+        return [x for x in all_symbols if f in x.lower()]
+    return all_symbols
+
+
+@cache
+def list_periods(f: str | None) -> List[str]:
+    if f:
+        f = f.lower()
+        return [x for x in FREQUENCIES_IDS.values() if f in x.lower()]
+    return list(map(str.upper, FREQUENCIES_IDS.values()))
 
 
 response_search_model: Dict = {

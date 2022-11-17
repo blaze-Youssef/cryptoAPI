@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
 
-from src.conf import symbols_btc, symbols_eth, symbols_sol
+from src.conf import all_symbols, symbols_btc, symbols_eth, symbols_sol
 
 
 class SYMBOL_ID(BaseModel):
@@ -13,7 +13,7 @@ class SYMBOL_ID(BaseModel):
     @validator("symbol_id")
     def val(cls, v):
         v = v.upper()
-        if v in symbols_btc or v in symbols_eth:
+        if v in all_symbols:
             return v
         raise HTTPException(
             404, detail="Invalid parameter symbol_id. You can list all symbols in #doc"
@@ -23,7 +23,10 @@ class SYMBOL_ID(BaseModel):
     def v(cls, v, values, **kwargs):
         if values["symbol_id"] in symbols_btc:
             return 0
-        return 1
+        elif values["symbol_id"] in symbols_eth:
+            return 1
+        elif values["symbol_id"] in symbols_sol:
+            return 2
 
     def __hash__(self):
         return hash(self.symbol_id.lower())

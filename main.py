@@ -14,13 +14,18 @@ from datetime import datetime
 from typing import List
 
 from dateutil import parser
-from fastapi import Depends, FastAPI, HTTPException, Path, Query
+from fastapi import Depends, FastAPI, HTTPException, Path, Query, status
 from fastapi.responses import RedirectResponse
 
 from schemas.schemas import SYMBOL_ID, response
 from src.conf import get_settings
 from src.database import scoped_Session
-from src.methods import PrettyJSONResponse, list_symbols, response_search_model
+from src.methods import (
+    PrettyJSONResponse,
+    list_periods,
+    list_symbols,
+    response_search_model,
+)
 from src.search import search
 from src.storing import INITIAL_DATETIME_DEF
 
@@ -63,6 +68,10 @@ async def history(
         default=datetime.now(),
         description="Timeseries ending time in ISO 8601 (optional, if not supplied then the data is returned to the end or when count of result elements reaches the limit)",
     ),
+    period_id: str = Query(
+        default="1MIN",
+        description="Identifier of requested timeseries period [here](/v1/periods)",
+    ),
     limit: int = Query(
         default=100,
         description="Amount of items to return (optional, mininum is 1, maximum is 100000, default value is 100.",
@@ -71,14 +80,21 @@ async def history(
     ),
     Session=Depends(get_db),
 ) -> List[response]:
-
     if not API_KEY == get_settings("API_KEY"):
-        raise HTTPException(401, "Not authenticated.")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED, detail="Not authenticated"
+        )
+
     symbol: SYMBOL_ID = SYMBOL_ID(symbol_id=symbol_id, type=0)
 
-    return await search(symbol, time_start, time_end, limit, Session)
+    return await search(symbol, time_start, time_end, limit, Session, period_id)
 
 
 @app.get("/v1/ListSymbols", response_class=PrettyJSONResponse)
 def listymbols(Filter: (str | None) = None) -> List[str]:
     return list_symbols(Filter)
+
+
+@app.get("/v1/periods", response_class=PrettyJSONResponse)
+def listperiods(Filter: (str | None) = None) -> List[str]:
+    return list_periods(Filter)
