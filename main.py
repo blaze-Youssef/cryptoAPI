@@ -116,6 +116,6 @@ def listperiods(Filter: (str | None) = None) -> List[str]:
     return list_periods(Filter)
 
 
-"""@app.get("/loaderio-3ccf1d75c70d8856938eece458f30f65.txt", include_in_schema=False)
+@app.get("/loaderio-3ccf1d75c70d8856938eece458f30f65.txt", include_in_schema=False)
 async def loaderio_3ccf1d75c70d8856938eece458f30f65():
-    return HTMLResponse("loaderio-3ccf1d75c70d8856938eece458f30f65")"""
+    return HTMLResponse("loaderio-3ccf1d75c70d8856938eece458f30f65")
