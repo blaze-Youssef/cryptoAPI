@@ -18,18 +18,15 @@ def get_settings(key: str) -> str:
 FREQUENCIES_IDS: Dict[int, str] = {1: "1min", 2: "1day"}
 
 symbols_sol = [
-    "DERIBIT_IDX_SOL_USD",
     "DERIBIT_PERP_SOL_USD",
 ]
 
 symbols_btc = [
     "DERIBIT_PERP_BTC_USD",
-    "DERIBIT_IDX_BTC_USD",
 ]
 
 symbols_eth = [
     "DERIBIT_PERP_ETH_USD",
-    "DERIBIT_IDX_ETH_USD",
     "DERIBIT_SPOT_ETH_USD",
 ]
 
