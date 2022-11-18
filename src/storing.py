@@ -1,3 +1,5 @@
+from time import sleep
+
 import sentry_sdk
 
 from .conf import get_settings
@@ -64,6 +66,7 @@ def refresh_exchanges_btc():
     Session.begin()
     try:
         while True:
+            sleep(10)
             for freq_id, freq in get_all_frequencies():
                 freq = freq.upper()
                 # Get Last update time for all BTC
@@ -125,6 +128,7 @@ def refresh_exchanges_eth():
     Session.begin()
     try:
         while True:
+            sleep(10)
             for freq_id, freq in get_all_frequencies():
                 freq = freq.upper()
                 # Get Last update time for all ETH
@@ -186,6 +190,7 @@ def refresh_exchanges_sol():
     Session.begin()
     try:
         while True:
+            sleep(10)
             for freq_id, freq in get_all_frequencies():
                 freq = freq.upper()
 
