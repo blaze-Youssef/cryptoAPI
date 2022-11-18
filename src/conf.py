@@ -27,7 +27,6 @@ symbols_btc = [
 
 symbols_eth = [
     "DERIBIT_PERP_ETH_USD",
-    "DERIBIT_SPOT_ETH_USD",
 ]
 
 
