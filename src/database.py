@@ -19,6 +19,7 @@ engine = create_engine(
     pool_size=20,
     max_overflow=0,
     pool_pre_ping=True,
+    pool_recycle=3600,
 )
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 scoped_Session = scoped_session(SessionLocal)
