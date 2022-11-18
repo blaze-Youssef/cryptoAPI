@@ -16,7 +16,7 @@ from typing import List
 from dateutil import parser
 from fastapi import Depends, FastAPI, HTTPException, Path, Query, status
 from fastapi.openapi.docs import get_swagger_ui_html
-from fastapi.responses import RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from schemas.schemas import SYMBOL_ID, response
@@ -68,6 +68,7 @@ async def docs_redirect():
     "/v1/ohlcv/{symbol_id}/history",
     responses=response_search_model,
     description="Get OHLCV timeseries data returned in time ascending order. Data can be requested by the period and for the specific symbol eg BITSTAMP_SPOT_BTC_USD, if you need to query timeseries by asset pairs eg. BTC/USD, then please reffer to the Exchange Rates Timeseries data",
+    response_class=PrettyJSONResponse,
 )
 async def history(
     API_KEY: str = Query(..., description="Authentication token"),
@@ -113,3 +114,8 @@ def listymbols(Filter: (str | None) = None) -> List[str]:
 @app.get("/v1/periods", response_class=PrettyJSONResponse)
 def listperiods(Filter: (str | None) = None) -> List[str]:
     return list_periods(Filter)
+
+
+@app.get("/loaderio-3ccf1d75c70d8856938eece458f30f65.txt", include_in_schema=False)
+async def loaderio_3ccf1d75c70d8856938eece458f30f65():
+    return HTMLResponse("loaderio-3ccf1d75c70d8856938eece458f30f65")
