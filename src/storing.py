@@ -129,7 +129,7 @@ def refresh_exchanges_btc():
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
-                        if len(objs) == 200:
+                        if len(objs) > 200:
 
                             Session.commit()
                             objs = []
@@ -224,7 +224,7 @@ def refresh_exchanges_eth():
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
-                        if len(objs) == 200:
+                        if len(objs) > 200:
                             Session.commit()
                             eth_logger.debug(
                                 f"ETH commited {len(objs)} rows to the database (commit every 200 row)."
@@ -319,7 +319,7 @@ def refresh_exchanges_sol():
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
-                        if len(objs) == 200:
+                        if len(objs) > 200:
                             Session.commit()
                             sol_logger.debug(
                                 f"SOL commited {len(objs)} rows to the database (commit every 200 row)."
