@@ -1,4 +1,5 @@
 import json
+import logging
 import typing
 from functools import cache
 from typing import Dict, List, Tuple
@@ -6,7 +7,7 @@ from typing import Dict, List, Tuple
 from starlette.responses import Response
 
 from schemas.schemas import response
-from src.conf import FREQUENCIES_IDS, all_symbols
+from src.conf import FREQUENCIES_IDS, all_symbols, get_settings
 
 
 @cache
@@ -84,3 +85,23 @@ response_search_model: Dict = {
         },
     }
 }
+
+
+def setup_logger(name, log_file):
+    """To setup as many loggers as you want"""
+    debug_level = get_settings("DEBUG_LEVEL").lower()
+    if debug_level == "debug":
+        level = logging.DEBUG
+    elif debug_level == "info":
+        level = logging.INFO
+    else:
+        level = logging.ERROR
+    formatter = logging.Formatter("%(asctime)s %(levelname)s  %(message)s")
+    handler = logging.FileHandler(log_file, "a+", encoding="utf-8")
+    handler.setFormatter(formatter)
+
+    logger = logging.getLogger(name)
+    logger.setLevel(level)
+    logger.addHandler(handler)
+
+    return logger

@@ -22,11 +22,27 @@ from src.database import Assetbtc, Asseteth, Assetsol
 from src.database import scoped_Session as Session
 
 from .conf import api_call, symbols_btc, symbols_eth, symbols_sol
-from .methods import get_all_frequencies
+from .methods import get_all_frequencies, setup_logger
 
 INITIAL_DATETIME_DEF: str = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
+
+
 request_session = None
+
+
+btc_logger = setup_logger(
+    "btc_logger",
+    "./log/btc.txt",
+)
+eth_logger = setup_logger(
+    "eth_logger",
+    "./log/eth.txt",
+)
+sol_logger = setup_logger(
+    "sol_logger",
+    "./log/sol.txt",
+)
 
 
 def get_iso():
@@ -45,6 +61,7 @@ def get_iso():
 def refresh_exchanges_btc():
     Session.begin()
     data_db = {}
+    btc_logger.info("BTC started listening for new data.")
     try:
         while True:
             sleep(10)
@@ -72,6 +89,10 @@ def refresh_exchanges_btc():
                             (x, datetime.fromisoformat(INITIAL_DATETIME_DEF))
                             for x in set(symbols_btc) - set([x[0] for x in data_b])
                         ]
+                        if data_b:
+                            btc_logger.debug(
+                                f"BTC Noticed {len(data_b)} symbol_ids with no rows in database, checking.."
+                            )
                     for symbol_id, enddatetime in data_b:
 
                         data_btc = api_call(
@@ -100,18 +121,24 @@ def refresh_exchanges_btc():
                             )
                             objs.append(obj)
                             if not is_data:
+                                btc_logger.debug(
+                                    f"BTC {symbol_id} Found data, adding to session."
+                                )
                                 is_data = True
                         if is_data:
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
                 if objs:
+                    btc_logger.info(f"BTC commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
+                    btc_logger.debug(f"BTC commiting finished successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
         print(e)
+        btc_logger.error(e)
         sentry_sdk.capture_exception(e)
     except:
         sentry_sdk.capture_exception()
@@ -121,6 +148,7 @@ def refresh_exchanges_btc():
 def refresh_exchanges_eth():
     Session.begin()
     data_db = {}
+    eth_logger.info("ETH started listening for new data.")
     try:
         while True:
             sleep(10)
@@ -148,6 +176,10 @@ def refresh_exchanges_eth():
                             (x, datetime.fromisoformat(INITIAL_DATETIME_DEF))
                             for x in set(symbols_eth) - set([x[0] for x in data_b])
                         ]
+                        if data_b:
+                            eth_logger.debug(
+                                f"ETH Noticed {len(data_b)} symbol_ids with no rows in database, checking.."
+                            )
                     for symbol_id, enddatetime in data_b:
 
                         data_eth = api_call(
@@ -179,17 +211,23 @@ def refresh_exchanges_eth():
                             if not is_data:
                                 is_data = True
                         if is_data:
+                            eth_logger.debug(
+                                f"ETH {symbol_id} Found data, adding to session."
+                            )
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
 
                 if objs:
+                    eth_logger.info(f"ETH commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
+                    eth_logger.debug(f"ETH commiting finished successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
         print(e)
+        eth_logger.error(e)
         sentry_sdk.capture_exception(e)
     except:
         sentry_sdk.capture_exception()
@@ -199,6 +237,7 @@ def refresh_exchanges_eth():
 def refresh_exchanges_sol():
     Session.begin()
     data_db = {}
+    sol_logger.info("SOL started listening for new data.")
     try:
         while True:
             sleep(10)
@@ -227,6 +266,10 @@ def refresh_exchanges_sol():
                             (x, datetime.fromisoformat(INITIAL_DATETIME_DEF))
                             for x in set(symbols_sol) - set([x[0] for x in data_b])
                         ]
+                        if data_b:
+                            sol_logger.debug(
+                                f"SOL Noticed {len(data_b)} symbol_ids with no rows in database, checking.."
+                            )
                     for symbol_id, enddatetime in data_b:
 
                         data_sol = api_call(
@@ -257,16 +300,22 @@ def refresh_exchanges_sol():
                             if not is_data:
                                 is_data = True
                         if is_data:
+                            sol_logger.debug(
+                                f"SOL {symbol_id} Found data, adding to session."
+                            )
                             data_db[symbol_id] = objs[-1].time_period_end.replace(
                                 tzinfo=None
                             )
                 if objs:
+                    sol_logger.info(f"SOL commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
+                    sol_logger.debug(f"SOL commiting finished successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
         print(e)
+        sol_logger.error(e)
         sentry_sdk.capture_exception(e)
 
     Session.close()
