@@ -132,10 +132,11 @@ def refresh_exchanges_btc():
                         if len(objs) > 200:
 
                             Session.commit()
-                            objs = []
+
                             btc_logger.debug(
                                 f"BTC commited {len(objs)} rows to the database (commit every 200 row)."
                             )
+                            objs = []
                 if objs:
                     btc_logger.info(f"BTC commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
