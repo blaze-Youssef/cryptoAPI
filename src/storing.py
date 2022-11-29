@@ -99,6 +99,8 @@ def refresh_exchanges_btc():
                             f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
                             request_session,
                         )
+                        if not isinstance(data_btc, list):
+                            continue
                         is_data = False
                         for data_bt in data_btc:
                             obj = Assetbtc(
@@ -178,6 +180,7 @@ def refresh_exchanges_eth():
                     for symb, enddate in data_b:
                         data_db[symb] = enddate
                 objs = []
+
                 for i in (1, 2):
                     if i == 2:
                         data_b = [
@@ -194,6 +197,8 @@ def refresh_exchanges_eth():
                             f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
                             request_session,
                         )
+                        if not isinstance(data_eth, list):
+                            continue
                         is_data = False
                         for data_bt in data_eth:
                             obj = Asseteth(
@@ -291,6 +296,8 @@ def refresh_exchanges_sol():
                             f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
                             request_session,
                         )
+                        if not isinstance(data_sol, list):
+                            continue
                         is_data = False
                         for data_bt in data_sol:
                             obj = Assetsol(

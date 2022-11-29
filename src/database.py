@@ -38,7 +38,7 @@ class Assetbtc(Base):
     )
 
     id = Column(Integer, primary_key=True, index=True)
-    symbol_id = Column(String(30), nullable=False)
+    symbol_id = Column(String(50), nullable=False)
     time_period_start = Column(DateTime, nullable=False)
     time_period_end = Column(DateTime, nullable=False)
     time_open = Column(DateTime, nullable=False)
@@ -65,7 +65,7 @@ class Asseteth(Base):
     )
 
     id = Column(Integer, primary_key=True, index=True)
-    symbol_id = Column(String(30), nullable=False)
+    symbol_id = Column(String(50), nullable=False)
     time_period_start = Column(DateTime, nullable=False)
     time_period_end = Column(DateTime, nullable=False)
     time_open = Column(DateTime, nullable=False)
@@ -92,7 +92,7 @@ class Assetsol(Base):
     )
 
     id = Column(Integer, primary_key=True, index=True)
-    symbol_id = Column(String(30), nullable=False)
+    symbol_id = Column(String(50), nullable=False)
     time_period_start = Column(DateTime, nullable=False)
     time_period_end = Column(DateTime, nullable=False)
     time_open = Column(DateTime, nullable=False)
