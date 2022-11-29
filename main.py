@@ -74,7 +74,7 @@ async def history(
     API_KEY: str = Query(..., description="Authentication token"),
     symbol_id: str = Path(
         ...,
-        description="Symbol identifier of requested timeseries (full list available [here](/v1/ListSymbols))",
+        description="Symbol identifier of requested timeseries (full list available [here](/v1/ListSymbols))\n\nThe symbol_id outline is: {exchange_id}\_OPT\_{asset_id_base}\_{asset_id_quote}\_{YYMMDD of option_expiration_time}\_{option_strike_price}_{option_type_is_call as C/P}\n\nLike: DERIBIT_OPT_BTC_USD_220624_100000_C",  # type: ignore
     ),
     time_start: datetime = Query(
         default=parser.parse(INITIAL_DATETIME_DEF),
@@ -84,10 +84,10 @@ async def history(
         default=datetime.now(),
         description="Timeseries ending time in ISO 8601 (optional, if not supplied then the data is returned to the end or when count of result elements reaches the limit)",
     ),
-    period_id: str = Query(
-        default="1DAY",
-        description="Identifier of requested timeseries period [here](/v1/periods)",
-    ),
+    # period_id: str = Query(
+    #    default="1DAY",
+    #    description="Identifier of requested timeseries period [here](/v1/periods)",
+    # ),
     limit: int = Query(
         default=100,
         description="Amount of items to return (optional, mininum is 1, maximum is 100000, default value is 100.",
@@ -102,7 +102,7 @@ async def history(
         )
 
     symbol: SYMBOL_ID = SYMBOL_ID(symbol_id=symbol_id, type=0)
-
+    period_id = "1DAY"
     return await search(symbol, time_start, time_end, limit, Session, period_id)
 
 
@@ -111,9 +111,9 @@ def listymbols(Filter: (str | None) = None) -> List[str]:
     return list_symbols(Filter)
 
 
-@app.get("/v1/periods", response_class=PrettyJSONResponse)
+"""@app.get("/v1/periods", response_class=PrettyJSONResponse)
 def listperiods(Filter: (str | None) = None) -> List[str]:
-    return list_periods(Filter)
+    return list_periods(Filter)"""
 
 
 @app.get("/loaderio-3ccf1d75c70d8856938eece458f30f65.txt", include_in_schema=False)
