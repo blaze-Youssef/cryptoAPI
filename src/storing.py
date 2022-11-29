@@ -130,13 +130,17 @@ def refresh_exchanges_btc():
                                 tzinfo=None
                             )
                         if len(objs) == 200:
+
                             Session.commit()
                             objs = []
+                            btc_logger.debug(
+                                f"BTC commited {len(objs)} rows to the database (commit every 200 row)."
+                            )
                 if objs:
                     btc_logger.info(f"BTC commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
-                    btc_logger.debug(f"BTC commiting finished successfully.")
+                    btc_logger.debug(f"BTC comitted all rows successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
@@ -222,13 +226,16 @@ def refresh_exchanges_eth():
                             )
                         if len(objs) == 200:
                             Session.commit()
+                            eth_logger.debug(
+                                f"ETH commited {len(objs)} rows to the database (commit every 200 row)."
+                            )
                             objs = []
 
                 if objs:
                     eth_logger.info(f"ETH commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
-                    eth_logger.debug(f"ETH commiting finished successfully.")
+                    eth_logger.debug(f"ETH comitted all rows successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
@@ -314,12 +321,15 @@ def refresh_exchanges_sol():
                             )
                         if len(objs) == 200:
                             Session.commit()
+                            sol_logger.debug(
+                                f"SOL commited {len(objs)} rows to the database (commit every 200 row)."
+                            )
                             objs = []
                 if objs:
                     sol_logger.info(f"SOL commiting {len(objs)} rows to the database.")
                     Session.add_all(objs)
                     Session.commit()
-                    sol_logger.debug(f"SOL commiting finished successfully.")
+                    sol_logger.debug(f"SOL comitted all rows successfully.")
     except KeyboardInterrupt:
         print("Interrupt..")
     except Exception as e:
