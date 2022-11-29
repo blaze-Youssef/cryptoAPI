@@ -9,3 +9,4 @@ Dockerfile
 .pytest_cache
 .env
 log/*
+!This is a log dir
