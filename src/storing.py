@@ -130,7 +130,7 @@ def refresh_exchanges_btc():
                                 tzinfo=None
                             )
                         if len(objs) > 200:
-
+                            Session.add_all(objs)
                             Session.commit()
 
                             btc_logger.debug(
@@ -226,6 +226,7 @@ def refresh_exchanges_eth():
                                 tzinfo=None
                             )
                         if len(objs) > 200:
+                            Session.add_all(objs)
                             Session.commit()
                             eth_logger.debug(
                                 f"ETH commited {len(objs)} rows to the database (commit every 200 row)."
@@ -321,6 +322,7 @@ def refresh_exchanges_sol():
                                 tzinfo=None
                             )
                         if len(objs) > 200:
+                            Session.add_all(objs)
                             Session.commit()
                             sol_logger.debug(
                                 f"SOL commited {len(objs)} rows to the database (commit every 200 row)."

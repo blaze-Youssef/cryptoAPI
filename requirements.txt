@@ -9,3 +9,4 @@ gunicorn
 requests
 sentry-sdk==1.10.1
 sentry-sdk[fastapi]
+cryptography
