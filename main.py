@@ -85,7 +85,7 @@ async def history(
         description="Timeseries ending time in ISO 8601 (optional, if not supplied then the data is returned to the end or when count of result elements reaches the limit)",
     ),
     period_id: str = Query(
-        default="1MIN",
+        default="1DAY",
         description="Identifier of requested timeseries period [here](/v1/periods)",
     ),
     limit: int = Query(

@@ -15,38 +15,18 @@ sentry_sdk.init(
 from datetime import datetime, timedelta
 from typing import Dict, List
 
-import requests
 from dateutil import parser
 from sqlalchemy import func
 
 from src.database import Assetbtc, Asseteth, Assetsol
 from src.database import scoped_Session as Session
 
-from .conf import symbols_btc, symbols_eth, symbols_sol
-from .methods import get_all_frequencies, get_freq, get_freq_id
+from .conf import api_call, symbols_btc, symbols_eth, symbols_sol
+from .methods import get_all_frequencies
 
 INITIAL_DATETIME_DEF: str = get_settings("INITIAL_DATETIME_DEF")
 LIMIT = get_settings("LIMIT")
 request_session = None
-
-
-def api_call(path) -> List[Dict]:
-    global request_session
-    Exc: BaseException = BaseException("Error!")
-    if not request_session:
-        request_session = requests.Session()
-    url = f"https://rest.coinapi.io{path}"
-    for _ in (0, 1):
-        try:
-            response = request_session.get(
-                url,
-                headers={"X-CoinAPI-Key": get_settings("COIN_API")},
-            ).json()
-        except BaseException as e:
-            Exc = e
-        else:
-            return response
-    raise Exc
 
 
 def get_iso():
@@ -95,7 +75,8 @@ def refresh_exchanges_btc():
                     for symbol_id, enddatetime in data_b:
 
                         data_btc = api_call(
-                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}"
+                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
+                            request_session,
                         )
                         is_data = False
                         for data_bt in data_btc:
@@ -170,7 +151,8 @@ def refresh_exchanges_eth():
                     for symbol_id, enddatetime in data_b:
 
                         data_eth = api_call(
-                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}"
+                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
+                            request_session,
                         )
                         is_data = False
                         for data_bt in data_eth:
@@ -248,7 +230,8 @@ def refresh_exchanges_sol():
                     for symbol_id, enddatetime in data_b:
 
                         data_sol = api_call(
-                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}"
+                            f"/v1/ohlcv/{symbol_id}/history?period_id={freq}&time_start={enddatetime.replace(microsecond=0).isoformat()}&time_end={get_iso()}&limit={LIMIT}",
+                            request_session,
                         )
                         is_data = False
                         for data_bt in data_sol:
