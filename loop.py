@@ -14,7 +14,7 @@ logger.info("Service started.")
 CHECKFORERRORS = 60 * 5
 try:
 
-    with concurrent.futures.ThreadPoolExecutor(max_workers=2) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=3) as executor:
 
         job1 = executor.submit(src.storing.refresh_exchanges_btc)
         job2 = executor.submit(src.storing.refresh_exchanges_eth)
