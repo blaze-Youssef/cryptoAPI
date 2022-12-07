@@ -7,7 +7,8 @@ from typing import Dict, List, Tuple
 from starlette.responses import Response
 
 from schemas.schemas import response
-from src.conf import FREQUENCIES_IDS, all_symbols, get_settings
+from src.conf import FREQUENCIES_IDS, get_settings
+from src.symbols import all_symbols
 
 
 @cache

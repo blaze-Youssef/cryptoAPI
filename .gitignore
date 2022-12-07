@@ -1,6 +1,6 @@
 venv
 .env
-test.py
+test*
 creds
 __pycache__
 .vscode
@@ -10,3 +10,4 @@ Dockerfile
 .env
 log/*
 !This is a log dir
+*.pickle

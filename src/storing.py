@@ -20,8 +20,9 @@ from sqlalchemy import func
 
 from src.database import Assetbtc, Asseteth, Assetsol
 from src.database import scoped_Session as Session
+from src.symbols import symbols_btc, symbols_eth, symbols_sol
 
-from .conf import api_call, symbols_btc, symbols_eth, symbols_sol
+from .conf import api_call
 from .methods import get_all_frequencies, setup_logger
 
 INITIAL_DATETIME_DEF: str = get_settings("INITIAL_DATETIME_DEF")
